@@ -7,9 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class SnakeJpane extends JPanel {
+public class SnakeJpane extends JPanel  {
 
     private Snake snake;
+
+    private Coordinate dian;
 
     public SnakeJpane(Snake snake){
         this.snake =snake;
@@ -43,5 +45,22 @@ public class SnakeJpane extends JPanel {
             case 3:g.fillRect(coordinate.getX()*40+40,coordinate.getY()*40+20,20,40);break;
             case 4:g.fillRect(coordinate.getX()*40+20,coordinate.getY()*40+40,40,20);break;
         }
+    }
+
+
+    public Snake getSnake() {
+        return snake;
+    }
+
+    public void setSnake(Snake snake) {
+        this.snake = snake;
+    }
+
+    public Coordinate getDian() {
+        return dian;
+    }
+
+    public void setDian(Coordinate dian) {
+        this.dian = dian;
     }
 }

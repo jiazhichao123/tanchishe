@@ -1,6 +1,6 @@
 package domain;
 
-public class Coordinate {
+public class Coordinate implements Cloneable {
     private int x;
     private int y;
 
@@ -39,5 +39,15 @@ public class Coordinate {
             case 3: return new Coordinate(x-1,y);
             default:return new Coordinate(x,y-1);
         }
+    }
+
+    public Object clone() {
+        Coordinate o = null;
+        try {
+            o = (Coordinate) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return o;
     }
 }
