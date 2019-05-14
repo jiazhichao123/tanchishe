@@ -23,11 +23,11 @@ public class Snake {
         }
         int x = move.getX();
         int y = move.getY();
-        if(coordinateList.contains(move)||x <0||x>16||y<0||y>16){
+        coordinateList.remove(0);
+        if(coordinateList.contains(move)||x <0||x>18||y<0||y>18){
             //吃到了自己 或撞了墙
             return false;
         }
-        coordinateList.remove(0);
         coordinateList.add(move);
         return true;
     }
