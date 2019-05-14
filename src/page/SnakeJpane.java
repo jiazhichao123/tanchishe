@@ -26,8 +26,8 @@ public class SnakeJpane extends JPanel {
         g.fillRect(20,20,740,740);
         drawSnake(g);
     }
-
-    public void drawSnake(Graphics g){
+    //画蛇
+   private void drawSnake(Graphics g){
         List<Coordinate> coordinateList = snake.getCoordinateList();
         g.setColor(Color.green);
         int size = coordinateList.size();
