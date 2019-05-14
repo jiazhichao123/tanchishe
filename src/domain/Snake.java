@@ -23,7 +23,7 @@ public class Snake {
         }
         int x = move.getX();
         int y = move.getY();
-        if(coordinateList.contains(move)||x <0||x>16||y<0||x>16){
+        if(coordinateList.contains(move)||x <0||x>16||y<0||y>16){
             //吃到了自己 或撞了墙
             return false;
         }
@@ -32,4 +32,32 @@ public class Snake {
         return true;
     }
 
+
+
+
+
+    // 获取与赋值
+    public List<Coordinate> getCoordinateList() {
+        return coordinateList;
+    }
+
+    public void setCoordinateList(List<Coordinate> coordinateList) {
+        this.coordinateList = coordinateList;
+    }
+
+    public int getFx() {
+        return fx;
+    }
+
+    public void setFx(int fx) {
+        this.fx = fx;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
 }
