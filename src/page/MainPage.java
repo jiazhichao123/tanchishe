@@ -78,6 +78,7 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
         return new Snake(coordinates);
     }
     boolean begin;
+    int time = 200;
     @Override
     public void actionPerformed(ActionEvent e) {
         this.setFocusable(true);
@@ -99,7 +100,7 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
                    if (auto)
                        snake.autoMove();
                    try {
-                       Thread.sleep(50);
+                       Thread.sleep(time);
                    } catch (InterruptedException e1) {
                        e1.printStackTrace();
                    }
@@ -110,9 +111,11 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
             auto=false;
             snakeJpane.setSnake(getSnake());
             snakeJpane.repaint();
+            time = 200;
         }else if(e.getSource() == bt3){
             auto = true;
             bt2.doClick();
+            time=50;
         }
 
     }
