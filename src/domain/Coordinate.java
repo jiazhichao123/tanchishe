@@ -29,7 +29,7 @@ public class Coordinate implements Cloneable {
         Coordinate c = (Coordinate)obj;
         if (c.x != this.x)
             return false;
-        return c.y != this.y;
+        return c.y == this.y;
     }
 
      Coordinate move(int i){

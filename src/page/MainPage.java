@@ -14,7 +14,7 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
     JTextField tx1, tx2, tx3;
     JButton bt1, bt2, bt3, bt4;
     SnakeJpane snakeJpane;
-    boolean auto;
+    boolean auto = false;
     public MainPage(){
 
         bt1 = new JButton("初始化");
@@ -57,6 +57,7 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
 
         snakeJpane = new SnakeJpane(getSnake());
 
+        snakeJpane.addKeyListener(this);
         this.addKeyListener(this);
         this.setFocusable(true);
 
@@ -79,7 +80,8 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        this.setFocusable(true);
+        this.requestFocus();
         if (e.getSource() == bt2){
            Thread thread = new Thread(()->{
                while (true){
@@ -92,6 +94,7 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
                    }
                }
            });
+           thread.start();
         }
 
     }

@@ -5,13 +5,14 @@ import domain.Snake;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 
-public class SnakeJpane extends JPanel  {
+public class SnakeJpane extends JPanel{
 
     private Snake snake;
 
-    private Coordinate dian;
 
     public SnakeJpane(Snake snake){
         this.snake =snake;
@@ -25,8 +26,11 @@ public class SnakeJpane extends JPanel  {
         g.fillRect(0,0,800,800);
 
         g.setColor(Color.black);
-        g.fillRect(20,20,740,740);
+        g.fillRect(20,20,760,760);
         drawSnake(g);
+
+        g.setColor(Color.yellow);
+        g.fillRoundRect(snake.getDian().getX()*40+20,snake.getDian().getY()*40+20,40,40,40,40);
     }
     //画蛇
    private void drawSnake(Graphics g){
@@ -56,11 +60,4 @@ public class SnakeJpane extends JPanel  {
         this.snake = snake;
     }
 
-    public Coordinate getDian() {
-        return dian;
-    }
-
-    public void setDian(Coordinate dian) {
-        this.dian = dian;
-    }
 }
