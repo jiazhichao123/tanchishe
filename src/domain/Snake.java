@@ -7,6 +7,7 @@ public class Snake {
     private ArrayList<Coordinate> coordinateList;
     private ArrayList<Coordinate> all;
     private int fx = 1;
+    private int yfx = 1;
     private int size;
     private Coordinate dian;
 
@@ -20,6 +21,11 @@ public class Snake {
     }
 
     public boolean move(){
+        int cha = yfx -fx;
+        if (cha != -2 && cha != 2){
+            fx = yfx;
+        }
+
         Coordinate cd = coordinateList.get(size - 1);
         Coordinate move = cd.move(fx);
         if (dian.equals(move)){
@@ -87,10 +93,7 @@ public class Snake {
     }
 
     public void setFx(int fx) {
-        int cha = this.fx -fx;
-        if (cha == -2 || cha == 2)
-            return;
-        this.fx = fx;
+        this.yfx = fx;
     }
 
     public int getSize() {

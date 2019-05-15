@@ -77,16 +77,22 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
         coordinates.add(new Coordinate(4,2));
         return new Snake(coordinates);
     }
-
+    boolean begin;
     @Override
     public void actionPerformed(ActionEvent e) {
         this.setFocusable(true);
         this.requestFocus();
         if (e.getSource() == bt2){
            Thread thread = new Thread(()->{
+               begin= true;
                while (true){
-                   snakeJpane.getSnake().move();
+                   boolean move = snakeJpane.getSnake().move();
                    snakeJpane.repaint();
+                   px2.setText(snakeJpane.getSnake().getSize()+"");
+                   if (!move){
+                       begin= false;
+                       break;
+                   }
                    try {
                        Thread.sleep(200);
                    } catch (InterruptedException e1) {
@@ -95,6 +101,11 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
                }
            });
            thread.start();
+        }else if (e.getSource() == bt1){
+            if (begin)
+                return;
+            snakeJpane.setSnake(getSnake());
+            snakeJpane.repaint();
         }
 
     }
