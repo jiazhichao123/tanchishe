@@ -37,18 +37,22 @@ public class SnakeJpane extends JPanel{
         List<Coordinate> coordinateList = snake.getCoordinateList();
         g.setColor(Color.green);
         int size = coordinateList.size();
+       Coordinate coordinate = coordinateList.get(size-1);
+       g.fillRoundRect(coordinate.getX()*40+20,coordinate.getY()*40+20,40,40,40,40);
+       switch (snake.getFx()){
+           case 1:g.fillRect(coordinate.getX()*40+20,coordinate.getY()*40+20,20,40);break;
+           case 2:g.fillRect(coordinate.getX()*40+20,coordinate.getY()*40+20,40,20);break;
+           case 3:g.fillRect(coordinate.getX()*40+40,coordinate.getY()*40+20,20,40);break;
+           case 4:g.fillRect(coordinate.getX()*40+20,coordinate.getY()*40+40,40,20);break;
+       }
         for (int i =0;i<size-1;i++){
-            Coordinate coordinate = coordinateList.get(i);
-            g.fillRect(coordinate.getX()*40+20,coordinate.getY()*40+20,40,40);
+            Coordinate coordinate1 = coordinateList.get(i);
+            g.fillRect(coordinate1.getX()*40+20,coordinate1.getY()*40+20,40,40);
+            g.setColor(Color.white);
+            g.drawRect(coordinate1.getX()*40+20,coordinate1.getY()*40+20,40,40);
+            g.setColor(Color.green);
         }
-        Coordinate coordinate = coordinateList.get(size-1);
-        g.fillRoundRect(coordinate.getX()*40+20,coordinate.getY()*40+20,40,40,40,40);
-        switch (snake.getFx()){
-            case 1:g.fillRect(coordinate.getX()*40+20,coordinate.getY()*40+20,20,40);break;
-            case 2:g.fillRect(coordinate.getX()*40+20,coordinate.getY()*40+20,40,20);break;
-            case 3:g.fillRect(coordinate.getX()*40+40,coordinate.getY()*40+20,20,40);break;
-            case 4:g.fillRect(coordinate.getX()*40+20,coordinate.getY()*40+40,40,20);break;
-        }
+
     }
 
 
