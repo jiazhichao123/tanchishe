@@ -13,22 +13,22 @@ public class Snake {
 
     private int c = 18;
 
-    public Snake(ArrayList<Coordinate> coordinateList){
+    public Snake(ArrayList<Coordinate> coordinateList) {
         this.coordinateList = coordinateList;
         size = coordinateList.size();
         all = getDians();
         createDian();
     }
 
-    public boolean move(){
-        int cha = yfx -fx;
-        if (cha != -2 && cha != 2){
+    public boolean move() {
+        int cha = yfx - fx;
+        if (cha != -2 && cha != 2) {
             fx = yfx;
         }
 
         Coordinate cd = coordinateList.get(size - 1);
         Coordinate move = cd.move(fx);
-        if (dian.equals(move)){
+        if (dian.equals(move)) {
             //吃到了点
             size++;
             coordinateList.add(move);
@@ -38,7 +38,7 @@ public class Snake {
         int x = move.getX();
         int y = move.getY();
         coordinateList.remove(0);
-        if(coordinateList.contains(move)||x <0||x>c||y<0||y>c){
+        if (coordinateList.contains(move) || x < 0 || x > c || y < 0 || y > c) {
             //吃到了自己 或撞了墙
             return false;
         }
@@ -47,17 +47,17 @@ public class Snake {
     }
 
 
-    private void createDian(){
+    private void createDian() {
         //点生产效率
-        if (size < 310){
-            while (true){
+        if (size < 310) {
+            while (true) {
                 Coordinate coordinate = all.get((int) (c * c * Math.random()));
-                if (!coordinateList.contains(coordinate)){
+                if (!coordinateList.contains(coordinate)) {
                     dian = (Coordinate) coordinate.clone();
                     return;
                 }
             }
-        }else if (size <c*c){
+        } else if (size < c * c) {
             ArrayList<Coordinate> clone = (ArrayList<Coordinate>) all.clone();
             clone.remove(coordinateList);
             Coordinate coordinate = clone.get((int) (clone.size() * Math.random()));
@@ -66,18 +66,74 @@ public class Snake {
         }
         dian = null;
     }
-   private ArrayList<Coordinate> getDians(){
-       ArrayList<Coordinate> coordinates = new ArrayList<>();
-        for (int x=0;x<c+1;x++){
-            for (int y=0;y<c+1;y++){
+
+    private ArrayList<Coordinate> getDians() {
+        ArrayList<Coordinate> coordinates = new ArrayList<>();
+        for (int x = 0; x < c + 1; x++) {
+            for (int y = 0; y < c + 1; y++) {
                 coordinates.add(new Coordinate(x, y));
             }
 
         }
         return coordinates;
-   }
+    }
 
 
+    public void autoMove() {
+        Coordinate coordinate = coordinateList.get(size - 1);
+        if (dian.getX() > coordinate.getX()) {
+            if (qie(coordinate.move(1), 1)) {
+                return;
+            }
+        } else if (dian.getX() < coordinate.getX()) {
+            if (qie(coordinate.move(3), 3)) {
+                return;
+            }
+        }
+        if (dian.getY() > coordinate.getY()) {
+            if (qie(coordinate.move(2), 2)) {
+                return;
+            }
+        } else if (dian.getY() < coordinate.getY()) {
+            if (qie(coordinate.move(4), 4)) {
+                return;
+            }
+        }
+        if (qie(coordinate.move(1), 1)) {
+            return;
+        }
+        if (qie(coordinate.move(2), 2)) {
+            return;
+        }
+        if (qie(coordinate.move(3), 3)) {
+            return;
+        }
+        qie(coordinate.move(4), 4);
+
+    }
+
+    private boolean qie(Coordinate move1, int i) {
+        ArrayList<Coordinate> clone = (ArrayList<Coordinate>)coordinateList.clone();
+        if (!move1.equals(dian)){
+            clone.remove(0);
+        }
+        if (clone.contains(move1)||move1.getX() < 0 || move1.getX() > c || move1.getY() < 0 || move1.getY() > c) {
+            //吃到了自己 或撞了墙
+            return false;
+        }
+        setFx(i);
+        return true;
+    }
+
+//    public void chose(int i,Coordinate coordinate){
+//        if (!coordinateList.contains(coordinate.move(i))){
+//            setFx(i);
+//            return;
+//        }else {
+//            int fx = (i+2)>4?(i-4):(i+2);
+//            setFx();
+//        }
+//    }
 
     // 获取与赋值
     public List<Coordinate> getCoordinateList() {

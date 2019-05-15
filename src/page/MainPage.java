@@ -64,7 +64,7 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
         this.add(snakeJpane,BorderLayout.CENTER);
         this.add(mb1,BorderLayout.EAST);
         this.setTitle("贪吃蛇");
-        this.setSize(1000, 800);
+        this.setSize(1000, 850);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -82,19 +82,24 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent e) {
         this.setFocusable(true);
         this.requestFocus();
+        if (begin)
+            return;
         if (e.getSource() == bt2){
            Thread thread = new Thread(()->{
                begin= true;
                while (true){
-                   boolean move = snakeJpane.getSnake().move();
+                   Snake snake = snakeJpane.getSnake();
+                   boolean move = snake.move();
                    snakeJpane.repaint();
                    px2.setText(snakeJpane.getSnake().getSize()+"");
                    if (!move){
                        begin= false;
                        break;
                    }
+                   if (auto)
+                       snake.autoMove();
                    try {
-                       Thread.sleep(200);
+                       Thread.sleep(50);
                    } catch (InterruptedException e1) {
                        e1.printStackTrace();
                    }
@@ -102,10 +107,12 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
            });
            thread.start();
         }else if (e.getSource() == bt1){
-            if (begin)
-                return;
+            auto=false;
             snakeJpane.setSnake(getSnake());
             snakeJpane.repaint();
+        }else if(e.getSource() == bt3){
+            auto = true;
+            bt2.doClick();
         }
 
     }
