@@ -81,6 +81,9 @@ public class Snake {
 
     public void autoMove() {
         Coordinate coordinate = coordinateList.get(size - 1);
+
+        if (fengbi())
+            return;
         if (dian.getX() > coordinate.getX()) {
             if (qie(coordinate.move(1), 1)) {
                 return;
@@ -114,6 +117,8 @@ public class Snake {
 
     private boolean qie(Coordinate move1, int i) {
         ArrayList<Coordinate> clone = (ArrayList<Coordinate>)coordinateList.clone();
+        if ((i>2?(i-2):i+2) == fx)
+            return false;
         if (!move1.equals(dian)){
             clone.remove(0);
         }
@@ -123,6 +128,34 @@ public class Snake {
         }
         setFx(i);
         return true;
+    }
+
+
+    private boolean fengbi(){
+        ArrayList<Coordinate> clone = (ArrayList<Coordinate>)coordinateList.clone();
+        Coordinate coordinate = clone.get(size - 1);
+        Coordinate move1 = coordinate.move(fx);
+        int n;
+        if ((n = clone.indexOf(move1))!=-1){
+            int nfx = (fx+1)>4?(fx-3):(fx+1);
+            Coordinate move = move1.move(nfx);
+            int i = clone.indexOf(move);
+            int tfx =nfx>2?(nfx-2):(nfx+2);
+            if (i != -1){
+                if (i>n&&!clone.contains(coordinate.move(tfx))){
+                    nfx = tfx;
+                }
+            }else {
+                move = move1.move(tfx);
+                i = clone.indexOf(move);
+                if (i<n&&!clone.contains(coordinate.move(tfx))){
+                    nfx = tfx;
+                }
+            }
+            setFx(nfx);
+            return true;
+        }
+        return false;
     }
 
 //    public void chose(int i,Coordinate coordinate){
