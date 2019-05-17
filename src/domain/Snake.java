@@ -85,33 +85,33 @@ public class Snake {
         if (fengbi())
             return;
         if (dian.getX() > coordinate.getX()) {
-            if (qie(coordinate.move(1), 1)) {
+            if (qie(coordinate, 1)) {
                 return;
             }
         } else if (dian.getX() < coordinate.getX()) {
-            if (qie(coordinate.move(3), 3)) {
+            if (qie(coordinate, 3)) {
                 return;
             }
         }
         if (dian.getY() > coordinate.getY()) {
-            if (qie(coordinate.move(2), 2)) {
+            if (qie(coordinate, 2)) {
                 return;
             }
         } else if (dian.getY() < coordinate.getY()) {
-            if (qie(coordinate.move(4), 4)) {
+            if (qie(coordinate, 4)) {
                 return;
             }
         }
-        if (qie(coordinate.move(1), 1)) {
+        if (qie(coordinate, 1)) {
             return;
         }
-        if (qie(coordinate.move(2), 2)) {
+        if (qie(coordinate, 2)) {
             return;
         }
-        if (qie(coordinate.move(3), 3)) {
+        if (qie(coordinate, 3)) {
             return;
         }
-        qie(coordinate.move(4), 4);
+        qie(coordinate, 4);
 
     }
 
@@ -122,7 +122,7 @@ public class Snake {
         if (!move1.equals(dian)){
             clone.remove(0);
         }
-        if (clone.contains(move1)||move1.getX() < 0 || move1.getX() > c || move1.getY() < 0 || move1.getY() > c) {
+        if (contains(clone,move1,i)) {
             //吃到了自己 或撞了墙
             return false;
         }
@@ -142,22 +142,41 @@ public class Snake {
             int i = clone.indexOf(move);
             int tfx =nfx>2?(nfx-2):(nfx+2);
             if (i != -1){
-                if (i>n&&!clone.contains(coordinate.move(tfx))){
-                    nfx = tfx;
-                }
-            }else {
-                move = move1.move(tfx);
-                i = clone.indexOf(move);
-                if (i<n&&!clone.contains(coordinate.move(tfx))){
+                if (i>n&&!contains(clone,coordinate,tfx)){
                     nfx = tfx;
                 }
             }
-            setFx(nfx);
+            else {
+                move = move1.move(tfx);
+                i = clone.indexOf(move);
+                if (i<n&&!contains(clone,coordinate,tfx)){
+                    nfx = tfx;
+                }
+            }
+            if (contains(clone,coordinate,nfx)){
+                setFx(tfx);
+            }else {
+                setFx(nfx);
+            }
+
             return true;
         }
         return false;
     }
 
+    public boolean contains(ArrayList<Coordinate> clone, Coordinate coordinate ,int fxn ){
+        Coordinate move1 = coordinate.move(fxn);
+        if (!contains(clone,move1)){
+            int nfx = fxn==4?1:(fxn+1);
+            int nfx1 = fxn==1?4:(fxn-1);
+            return contains(clone,move1.move(nfx))&&contains(clone,move1.move(nfx1))&&contains(clone,move1.move(fxn));
+        }
+        return true;
+    }
+
+    public boolean contains(ArrayList<Coordinate> clone, Coordinate move1){
+        return (clone.contains(move1)||move1.getX() < 0 || move1.getX() > c || move1.getY() < 0 || move1.getY() > c);
+    }
 //    public void chose(int i,Coordinate coordinate){
 //        if (!coordinateList.contains(coordinate.move(i))){
 //            setFx(i);
