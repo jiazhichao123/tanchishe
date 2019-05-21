@@ -102,16 +102,18 @@ public class Snake {
                 return;
             }
         }
-        if (qie(coordinate, 1)) {
+        int newFx= dian.getX()>9?3:1;
+        int newFy= dian.getY()>9?4:2;
+        if (qie(coordinate, newFx)) {
             return;
         }
-        if (qie(coordinate, 2)) {
+        if (qie(coordinate, newFy)) {
             return;
         }
-        if (qie(coordinate, 3)) {
+        if (qie(coordinate, newFx>2?(newFx-2):(newFx+2))) {
             return;
         }
-        qie(coordinate, 4);
+        qie(coordinate, newFy>2?(newFy-2):(newFy+2));
 
     }
 
@@ -134,34 +136,48 @@ public class Snake {
     private boolean fengbi(){
         ArrayList<Coordinate> clone = (ArrayList<Coordinate>)coordinateList.clone();
         Coordinate coordinate = clone.get(size - 1);
-        Coordinate move1 = coordinate.move(fx);
-        int n;
-        if ((n = clone.indexOf(move1))!=-1){
-            int nfx = (fx+1)>4?(fx-3):(fx+1);
-            Coordinate move = move1.move(nfx);
-            int i = clone.indexOf(move);
-            int tfx =nfx>2?(nfx-2):(nfx+2);
-            if (i != -1){
-                if (i>n&&!contains(clone,coordinate,tfx)){
-                    nfx = tfx;
-                }
-            }
-            else {
-                move = move1.move(tfx);
-                i = clone.indexOf(move);
-                if (i<n&&!contains(clone,coordinate,tfx)){
-                    nfx = tfx;
-                }
-            }
-            if (contains(clone,coordinate,nfx)){
-                setFx(tfx);
-            }else {
-                setFx(nfx);
-            }
+        if (fengbiCheck(clone,coordinate)){
 
-            return true;
         }
         return false;
+//        Coordinate move1 = coordinate.move(fx);
+//        int n;
+//        if ((n = clone.indexOf(move1))!=-1){
+//            int nfx = (fx+1)>4?(fx-3):(fx+1);
+//            Coordinate move = move1.move(nfx);
+//            int i = clone.indexOf(move);
+//            int tfx =nfx>2?(nfx-2):(nfx+2);
+//            if (i != -1){
+//                if (i>n&&!contains(clone,coordinate,tfx)){
+//                    nfx = tfx;
+//                }
+//            }
+//            else {
+//                move = move1.move(tfx);
+//                i = clone.indexOf(move);
+//                if (i<n&&!contains(clone,coordinate,tfx)){
+//                    nfx = tfx;
+//                }
+//            }
+//            if (contains(clone,coordinate,nfx)){
+//                setFx(tfx);
+//            }else {
+//                setFx(nfx);
+//            }
+
+//            return true;
+//        }
+
+    }
+    private boolean fengbiCheck( ArrayList<Coordinate> clone,Coordinate coordinate){
+        if (size < 5)
+            return false;
+        int x = coordinate.getX();
+        int y = coordinate.getY();
+        int i = ((x==0)?1:0)+((x==c)?1:0)+((y==0)?1:0)+((y==c)?1:0);
+        if (i==2)
+            return false;
+        return true;
     }
 
     public boolean contains(ArrayList<Coordinate> clone, Coordinate coordinate ,int fxn ){
