@@ -50,4 +50,13 @@ public class Coordinate implements Cloneable {
         }
         return o;
     }
+
+
+    public boolean hasX(int x){
+        return this.x == x;
+    }
+
+    public boolean hasY(int y){
+        return this.y == y;
+    }
 }
