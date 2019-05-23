@@ -52,11 +52,11 @@ public class Coordinate implements Cloneable {
     }
 
 
-    public boolean hasX(int x){
+   boolean hasX(int x){
         return this.x == x;
     }
-
-    public boolean hasY(int y){
+    boolean hasY(int y){
         return this.y == y;
     }
+
 }

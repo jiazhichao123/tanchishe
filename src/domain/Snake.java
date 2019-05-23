@@ -2,6 +2,7 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Snake {
     private ArrayList<Coordinate> coordinateList;
@@ -172,13 +173,70 @@ public class Snake {
     private boolean fengbiCheck( ArrayList<Coordinate> clone,Coordinate coordinate){
         if (size < 5)
             return false;
+        Coordinate move = coordinate.move(fx);
         int x = coordinate.getX();
         int y = coordinate.getY();
-        int i = ((x==0)?1:0)+((x==c)?1:0)+((y==0)?1:0)+((y==c)?1:0);
-        if (i==2)
+        if (move.getX()<0||move.getX()>c){
+            for (int i = size-5;i>=0;i--){
+                Coordinate coor = coordinateList.get(i);
+                if (coor.hasX(x)){
+                    return true;
+                }
+            }
+        }else if (move.getY()<0||move.getY()>c){
+            for (int i = size-5;i>=0;i--){
+                Coordinate coor = coordinateList.get(i);
+                if (coor.hasY(y)){
+                    return true;
+                }
+            }
+        }
+        if (size < 7)
             return false;
-        return true;
+        int i = coordinateList.indexOf(move);
+        if (i>6){
+            return true;
+        }
+        int ui = coordinateList.indexOf(move.move(amend(fx+1)));
+        if (ui>5){
+            return true;
+        }
+        int di = coordinateList.indexOf(move.move(amend(fx-1)));
+        if (di>5){
+            coordinateList.subList(di,size-1);
+            return true;
+        }
+        return false;
     }
+
+
+    //算封闭环的面积
+    private int compute(ArrayList<Coordinate> clone){
+        int maxX=0;
+        int minX=c;
+        int maxY=0;
+        int minY=c;
+        int size = clone.size();
+        for (int i=0;i<size;i++){
+            Coordinate coordinate = clone.get(i);
+            int x = coordinate.getX();
+            int y = coordinate.getY();
+            maxX = maxX > x?maxX:x;
+            minX = minX < x?minX:x;
+            maxY = maxY > y?maxY:y;
+            minY = minY < x?minY:y;
+        }
+
+        for (int nx = minX;nx<=maxX;nx++){
+
+
+        }
+
+
+        return 0;
+
+    }
+
 
     public boolean contains(ArrayList<Coordinate> clone, Coordinate coordinate ,int fxn ){
         Coordinate move1 = coordinate.move(fxn);
@@ -210,6 +268,14 @@ public class Snake {
 
     public void setCoordinateList(ArrayList<Coordinate> coordinateList) {
         this.coordinateList = coordinateList;
+    }
+
+
+    //修正方向超出值
+    private int amend(int fx){
+        fx = fx > 4?(fx-4):fx;
+        fx = fx < 1?(fx+4):fx;
+        return fx;
     }
 
     public int getFx() {
