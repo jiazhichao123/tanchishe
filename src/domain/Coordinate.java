@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.UnknownFormatConversionException;
+
 public class Coordinate implements Cloneable {
     private int x;
     private int y;
@@ -33,6 +35,7 @@ public class Coordinate implements Cloneable {
     }
 
      Coordinate move(int i){
+         i = amend(i);
         switch (i){
             case 1: return new Coordinate(x+1,y);
             case 2: return new Coordinate(x,y+1);
@@ -40,7 +43,12 @@ public class Coordinate implements Cloneable {
             default:return new Coordinate(x,y-1);
         }
     }
-
+    //修正方向超出值
+    private int amend(int fx){
+        fx = fx > 4?(fx-4):fx;
+        fx = fx < 1?(fx+4):fx;
+        return fx;
+    }
     public Object clone() {
         Coordinate o = null;
         try {
@@ -51,6 +59,15 @@ public class Coordinate implements Cloneable {
         return o;
     }
 
+    int getfx(Coordinate c){
+        if (c.x > x)
+            return 1;
+        if (c.x < x)
+            return 3;
+        if (c.y > y)
+            return 2;
+        return 4;
+    }
 
    boolean hasX(int x){
         return this.x == x;

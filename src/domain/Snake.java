@@ -1,8 +1,6 @@
 package domain;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Snake {
     private ArrayList<Coordinate> coordinateList;
@@ -80,161 +78,54 @@ public class Snake {
     }
 
 
+    private ArrayList<Coordinate> route;
+
     public void autoMove() {
+        if (route == null || route.size() == 0){
+            route();
+        }
         Coordinate coordinate = coordinateList.get(size - 1);
-
-        if (fengbi())
-            return;
-        if (dian.getX() > coordinate.getX()) {
-            if (qie(coordinate, 1)) {
-                return;
-            }
-        } else if (dian.getX() < coordinate.getX()) {
-            if (qie(coordinate, 3)) {
-                return;
-            }
-        }
-        if (dian.getY() > coordinate.getY()) {
-            if (qie(coordinate, 2)) {
-                return;
-            }
-        } else if (dian.getY() < coordinate.getY()) {
-            if (qie(coordinate, 4)) {
-                return;
-            }
-        }
-        int newFx= dian.getX()>9?3:1;
-        int newFy= dian.getY()>9?4:2;
-        if (qie(coordinate, newFx)) {
-            return;
-        }
-        if (qie(coordinate, newFy)) {
-            return;
-        }
-        if (qie(coordinate, newFx>2?(newFx-2):(newFx+2))) {
-            return;
-        }
-        qie(coordinate, newFy>2?(newFy-2):(newFy+2));
-
+        Coordinate coordinate1 = route.get(0);
+        setFx(coordinate.getfx(coordinate1));
+        route.remove(0);
     }
 
-    private boolean qie(Coordinate move1, int i) {
-        ArrayList<Coordinate> clone = (ArrayList<Coordinate>)coordinateList.clone();
-        if ((i>2?(i-2):i+2) == fx)
-            return false;
-        if (!move1.equals(dian)){
-            clone.remove(0);
-        }
-        if (contains(clone,move1,i)) {
-            //吃到了自己 或撞了墙
-            return false;
-        }
-        setFx(i);
-        return true;
-    }
-
-
-    private boolean fengbi(){
-        ArrayList<Coordinate> clone = (ArrayList<Coordinate>)coordinateList.clone();
-        Coordinate coordinate = clone.get(size - 1);
-        if (fengbiCheck(clone,coordinate)){
-
-        }
-        return false;
-//        Coordinate move1 = coordinate.move(fx);
-//        int n;
-//        if ((n = clone.indexOf(move1))!=-1){
-//            int nfx = (fx+1)>4?(fx-3):(fx+1);
-//            Coordinate move = move1.move(nfx);
-//            int i = clone.indexOf(move);
-//            int tfx =nfx>2?(nfx-2):(nfx+2);
-//            if (i != -1){
-//                if (i>n&&!contains(clone,coordinate,tfx)){
-//                    nfx = tfx;
-//                }
-//            }
-//            else {
-//                move = move1.move(tfx);
-//                i = clone.indexOf(move);
-//                if (i<n&&!contains(clone,coordinate,tfx)){
-//                    nfx = tfx;
-//                }
-//            }
-//            if (contains(clone,coordinate,nfx)){
-//                setFx(tfx);
-//            }else {
-//                setFx(nfx);
-//            }
-
-//            return true;
+//    private boolean qie(Coordinate move1, Integer i) {
+//        ArrayList<Coordinate> clone = (ArrayList<Coordinate>)coordinateList.clone();
+//        if ((i>2?(i-2):i+2) == fx)
+//            return false;
+//        if (!move1.equals(dian)){
+//            clone.remove(0);
 //        }
+//        if (contains(clone,move1,i)) {
+//            //吃到了自己 或撞了墙
+//            return false;
+//        }
+//        setFx(i);
+//        return true;
+//    }
 
-    }
-    private boolean fengbiCheck( ArrayList<Coordinate> clone,Coordinate coordinate){
-        if (size < 5)
-            return false;
-        Coordinate move = coordinate.move(fx);
-        int x = coordinate.getX();
-        int y = coordinate.getY();
-        if (move.getX()<0||move.getX()>c){
-            for (int i = size-5;i>=0;i--){
-                Coordinate coor = coordinateList.get(i);
-                if (coor.hasX(x)){
-                    return true;
-                }
+
+    public void route(){
+        Coordinate coordinate = coordinateList.get(size - 1);
+        ArrayList<Coordinate> clone =(ArrayList<Coordinate>) coordinateList.clone();
+        clone.remove(size -1);
+        int nwfx =fx;
+        route = new ArrayList<>();
+        while (true){
+            if (coordinate.equals(dian))
+                break;
+            int getfx = coordinate.getfx(dian);
+            clone.remove(0);
+            if (getfx ==  amend(nwfx+2)){
+                nwfx =amend(fx+1);
+            }else {
+                nwfx =getfx;
             }
-        }else if (move.getY()<0||move.getY()>c){
-            for (int i = size-5;i>=0;i--){
-                Coordinate coor = coordinateList.get(i);
-                if (coor.hasY(y)){
-                    return true;
-                }
-            }
+            clone.add(coordinate);
+            coordinate = coordinate.move(nwfx);
+            route.add(coordinate);
         }
-        if (size < 7)
-            return false;
-        int i = coordinateList.indexOf(move);
-        if (i>6){
-            return true;
-        }
-        int ui = coordinateList.indexOf(move.move(amend(fx+1)));
-        if (ui>5){
-            return true;
-        }
-        int di = coordinateList.indexOf(move.move(amend(fx-1)));
-        if (di>5){
-            coordinateList.subList(di,size-1);
-            return true;
-        }
-        return false;
-    }
-
-
-    //算封闭环的面积
-    private int compute(ArrayList<Coordinate> clone){
-        int maxX=0;
-        int minX=c;
-        int maxY=0;
-        int minY=c;
-        int size = clone.size();
-        for (int i=0;i<size;i++){
-            Coordinate coordinate = clone.get(i);
-            int x = coordinate.getX();
-            int y = coordinate.getY();
-            maxX = maxX > x?maxX:x;
-            minX = minX < x?minX:x;
-            maxY = maxY > y?maxY:y;
-            minY = minY < x?minY:y;
-        }
-
-        for (int nx = minX;nx<=maxX;nx++){
-
-
-        }
-
-
-        return 0;
-
     }
 
 
@@ -283,7 +174,8 @@ public class Snake {
     }
 
     public void setFx(int fx) {
-        this.yfx = fx;
+        int amend = amend(fx);
+        this.yfx = amend;
     }
 
     public int getSize() {

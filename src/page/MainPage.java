@@ -79,26 +79,32 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
     }
     boolean begin;
     int time = 200;
+    boolean go = true;
     @Override
     public void actionPerformed(ActionEvent e) {
         this.setFocusable(true);
         this.requestFocus();
+        if (e.getSource() == bt4){
+            go = !go;
+        }
         if (begin)
             return;
         if (e.getSource() == bt2){
            Thread thread = new Thread(()->{
                begin= true;
                while (true){
-                   Snake snake = snakeJpane.getSnake();
-                   boolean move = snake.move();
-                   snakeJpane.repaint();
-                   px2.setText(snakeJpane.getSnake().getSize()+"");
-                   if (!move){
-                       begin= false;
-                       break;
+                   if (go){
+                       Snake snake = snakeJpane.getSnake();
+                       boolean move = snake.move();
+                       snakeJpane.repaint();
+                       px2.setText(snakeJpane.getSnake().getSize()+"");
+                       if (!move){
+                           begin= false;
+                           break;
+                       }
+                       if (auto)
+                           snake.autoMove();
                    }
-                   if (auto)
-                       snake.autoMove();
                    try {
                        Thread.sleep(time);
                    } catch (InterruptedException e1) {
