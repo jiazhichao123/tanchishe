@@ -3,11 +3,17 @@ package domain;
 import java.util.*;
 
 public class Snake {
+    //蛇身子
     private ArrayList<Coordinate> coordinateList;
+    //全屏的坐标
     private ArrayList<Coordinate> all;
+    //当前方向
     private int fx = 1;
+    //下次方向
     private int yfx = 1;
+    //长度
     private int size;
+    //被吃的点
     private Coordinate dian;
 
     private int c = 18;

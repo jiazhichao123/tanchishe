@@ -3,7 +3,7 @@ package domain;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * 第一个自动吃失败的版本 纪念用 无任何作用
+ * 第一个自动吃失败的版本 纪念用 无任何作用  最长长度110
  */
 public class Snake1 {
     private ArrayList<Coordinate> coordinateList;
