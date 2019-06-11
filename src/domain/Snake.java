@@ -180,8 +180,7 @@ public class Snake {
     }
 
     public void setFx(int fx) {
-        int amend = amend(fx);
-        this.yfx = amend;
+        this.yfx = amend(fx);
     }
 
     public int getSize() {
