@@ -1,19 +1,24 @@
 package domain;
 
-import java.util.ArrayList;
-import java.util.List;
-//暴力满屏版 暴力美学
-public class Snake {
+import java.util.*;
+
+public class Snake2 {
+    //蛇身子
     private ArrayList<Coordinate> coordinateList;
+    //全屏的坐标
     private ArrayList<Coordinate> all;
+    //当前方向
     private int fx = 1;
+    //下次方向
     private int yfx = 1;
+    //长度
     private int size;
+    //被吃的点
     private Coordinate dian;
 
     private int c = 18;
 
-    public Snake(ArrayList<Coordinate> coordinateList) {
+    public Snake2(ArrayList<Coordinate> coordinateList) {
         this.coordinateList = coordinateList;
         size = coordinateList.size();
         all = getDians();
@@ -79,28 +84,80 @@ public class Snake {
     }
 
 
-    public void autoMove() {
-        Coordinate coordinate = coordinateList.get(size - 1);
-        int x = coordinate.getX();
-        int y = coordinate.getY();
-        if(x< c-1){
-            if ((y==0 || y==c-1)&&x!=0){
-                setFx(2);
-                return;
-            }
-            if (x%2 == 0 && fx != 1){
-                setFx(3);
-                return;
-            }
-            if (x%2 == 1 && fx != 3){
-                setFx(1);
-                return;
-            }
-            setFx(2);
-        }else {
+    private ArrayList<Coordinate> route;
 
+    public void autoMove() {
+        if (route == null || route.size() == 0){
+            route();
+        }
+        Coordinate coordinate = coordinateList.get(size - 1);
+        Coordinate coordinate1 = route.get(0);
+        setFx(coordinate.getfx(coordinate1));
+        route.remove(0);
+    }
+
+//    private boolean qie(Coordinate move1, Integer i) {
+//        ArrayList<Coordinate> clone = (ArrayList<Coordinate>)coordinateList.clone();
+//        if ((i>2?(i-2):i+2) == fx)
+//            return false;
+//        if (!move1.equals(dian)){
+//            clone.remove(0);
+//        }
+//        if (contains(clone,move1,i)) {
+//            //吃到了自己 或撞了墙
+//            return false;
+//        }
+//        setFx(i);
+//        return true;
+//    }
+
+
+    public void route(){
+        Coordinate coordinate = coordinateList.get(size - 1);
+        ArrayList<Coordinate> clone =(ArrayList<Coordinate>) coordinateList.clone();
+        clone.remove(size -1);
+        int nwfx =fx;
+        route = new ArrayList<>();
+        while (true){
+            if (coordinate.equals(dian))
+                break;
+            int getfx = coordinate.getfx(dian);
+            clone.remove(0);
+            if (getfx ==  amend(nwfx+2)){
+                nwfx =amend(fx+1);
+            }else {
+                nwfx =getfx;
+            }
+            clone.add(coordinate);
+            coordinate = coordinate.move(nwfx);
+            route.add(coordinate);
         }
     }
+
+
+    public boolean contains(ArrayList<Coordinate> clone, Coordinate coordinate ,int fxn ){
+        Coordinate move1 = coordinate.move(fxn);
+        if (!contains(clone,move1)){
+            int nfx = fxn==4?1:(fxn+1);
+            int nfx1 = fxn==1?4:(fxn-1);
+            return contains(clone,move1.move(nfx))&&contains(clone,move1.move(nfx1))&&contains(clone,move1.move(fxn));
+        }
+        return true;
+    }
+
+    public boolean contains(ArrayList<Coordinate> clone, Coordinate move1){
+        return (clone.contains(move1)||move1.getX() < 0 || move1.getX() > c || move1.getY() < 0 || move1.getY() > c);
+    }
+//    public void chose(int i,Coordinate coordinate){
+//        if (!coordinateList.contains(coordinate.move(i))){
+//            setFx(i);
+//            return;
+//        }else {
+//            int fx = (i+2)>4?(i-4):(i+2);
+//            setFx();
+//        }
+//    }
+
     // 获取与赋值
     public List<Coordinate> getCoordinateList() {
         return coordinateList;
@@ -123,8 +180,7 @@ public class Snake {
     }
 
     public void setFx(int fx) {
-        int amend = amend(fx);
-        this.yfx = amend;
+        this.yfx = amend(fx);
     }
 
     public int getSize() {
