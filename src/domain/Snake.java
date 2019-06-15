@@ -2,6 +2,7 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.List;
+
 //暴力满屏版 暴力美学
 public class Snake {
     private ArrayList<Coordinate> coordinateList;
@@ -57,14 +58,12 @@ public class Snake {
                     return;
                 }
             }
-        } else if (size < c * c) {
+        } else{
             ArrayList<Coordinate> clone = (ArrayList<Coordinate>) all.clone();
-            clone.remove(coordinateList);
+            clone.removeAll(coordinateList);
             Coordinate coordinate = clone.get((int) (clone.size() * Math.random()));
             dian = (Coordinate) coordinate.clone();
-            return;
         }
-        dian = null;
     }
 
     private ArrayList<Coordinate> getDians() {
@@ -79,28 +78,67 @@ public class Snake {
     }
 
 
+    boolean one = true;
+
     public void autoMove() {
         Coordinate coordinate = coordinateList.get(size - 1);
         int x = coordinate.getX();
         int y = coordinate.getY();
-        if(x< c-1){
-            if ((y==0 || y==c-1)&&x!=0){
-                setFx(2);
-                return;
-            }
-            if (x%2 == 0 && fx != 1){
+        if (y == 0 && x == c) {
+            setFx(3);
+            return;
+        }
+        if (x == c) {
+            setFx(4);
+            return;
+        }
+        if (y < c - 1) {
+            if (y % 2 == 0 && fx != 1) {
+                if (x == 0) {
+                    setFx(2);
+                    return;
+                }
                 setFx(3);
                 return;
             }
-            if (x%2 == 1 && fx != 3){
+            if (y % 2 == 1 && fx != 3) {
+                if (x == c - 1) {
+                    setFx(2);
+                    return;
+                }
                 setFx(1);
                 return;
             }
             setFx(2);
-        }else {
-
+        } else {
+            if (x < c - 1) {
+                if (x % 2 == 0) {
+                    if (y == c - 1)
+                        setFx(2);
+                    else
+                        setFx(1);
+                } else {
+                    if (y == c - 1)
+                        setFx(1);
+                    else
+                        setFx(4);
+                }
+            } else {
+                if (x == c - 1 && y == c)
+                    if (one) {
+                        one=false;
+                        setFx(1);
+                        return;
+                    } else {
+                        one=true;
+                        setFx(4);
+                        return;
+                    }
+                setFx(1);
+            }
         }
     }
+
     // 获取与赋值
     public List<Coordinate> getCoordinateList() {
         return coordinateList;
@@ -112,9 +150,9 @@ public class Snake {
 
 
     //修正方向超出值
-    private int amend(int fx){
-        fx = fx > 4?(fx-4):fx;
-        fx = fx < 1?(fx+4):fx;
+    private int amend(int fx) {
+        fx = fx > 4 ? (fx - 4) : fx;
+        fx = fx < 1 ? (fx + 4) : fx;
         return fx;
     }
 

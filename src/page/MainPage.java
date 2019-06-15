@@ -121,7 +121,7 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
         }else if(e.getSource() == bt3){
             auto = true;
             bt2.doClick();
-            time=50;
+            time=10;
         }
 
     }
