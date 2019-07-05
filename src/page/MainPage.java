@@ -100,6 +100,7 @@ public class MainPage extends JFrame implements KeyListener, ActionListener {
                        px2.setText(snakeJpane.getSnake().getSize()+"");
                        if (!move){
                            begin= false;
+                           System.out.println("失败");
                            break;
                        }
                        if (auto)
